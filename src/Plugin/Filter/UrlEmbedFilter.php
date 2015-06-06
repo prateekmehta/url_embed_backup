@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\entity_embed\EntityHelperTrait;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -43,16 +42,6 @@ class urlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
    */
   public function tips($long = FALSE){
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function prepare($text, $langcode);
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getHTMLRestrictions();
 
 }
 
