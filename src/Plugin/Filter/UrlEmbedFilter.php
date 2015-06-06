@@ -30,22 +30,18 @@ class EmbedFilter extends FilterBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-  
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {  
   }
-  
   /**
    * {@inheritdoc}
    */
   public function process($text, $langcode) {
-   
   }
 
   /**
    * {@inheritdoc}
    */
-  public function tips($long = FALSE) {
-    
+  public function tips($long = FALSE){
   }
 
   /**
@@ -59,3 +55,4 @@ class EmbedFilter extends FilterBase implements ContainerFactoryPluginInterface 
   public function getHTMLRestrictions();
 
 }
+
