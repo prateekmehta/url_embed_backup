@@ -18,7 +18,7 @@ use Drupal\filter\Plugin\FilterBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
-class EmbedFilter extends FilterBase implements ContainerFactoryPluginInterface {
+class urlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
