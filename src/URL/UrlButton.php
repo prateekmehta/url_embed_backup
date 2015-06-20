@@ -18,10 +18,10 @@ use Drupal\url_embed\EntityHelperTrait;
  *   id = "url_button",
  *   label = @Translation("Url Button"),
  *   handlers = {
- *     "list_builder" = "Drupal\entity_embed\UrlButtonListBuilder",
+ *     "list_builder" = "Drupal\url_embed\UrlButtonListBuilder",
  *     "form" = {
- *       "add" = "Drupal\entity_embed\Form\UrlButtonForm",
- *       "edit" = "Drupal\entity_embed\Form\UrlButtonForm",
+ *       "add" = "Drupal\url_embed\Form\UrlButtonForm",
+ *       "edit" = "Drupal\url_embed\Form\UrlButtonForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm"
  *     }
  *   },
@@ -98,22 +98,22 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
   /**
    * {@inheritdoc}
    */
-  public function getEntityTypeMachineName() {
-    return $this->entity_type;
+  public function getSourceMachineName() {
+    return $this->source;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getEntityTypeLabel() {
+  public function getSourceLabel() {
     return $this->entityManager()->getDefinition($this->entity_type)->getLabel();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getEntityTypeBundles() {
-    return $this->entity_type_bundles;
+  public function getSourceBundles() {
+    return $this->source__bundles;
   }
 
   /**
@@ -131,7 +131,7 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
       return $image->url();
     }
     else {
-      return file_create_url(drupal_get_path('module', 'entity_embed') . '/js/plugins/drupalentity/entity.png');
+      return file_create_url(drupal_get_path('module', 'url_embed') . '/js/plugins/drupalentity/entity.png');
     }
   }
 
