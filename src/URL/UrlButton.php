@@ -77,7 +77,7 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    *
    * @var array
    */
-  public $Oembed_type;
+  public $oembed_provider;
 
   /**
    * UUID of the button's icon file.
@@ -112,13 +112,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSourceBundles() {
-    return $this->source__bundles;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getButtonLabel() {
     return $this->button_label;
   }
@@ -133,20 +126,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
     else {
       return file_create_url(drupal_get_path('module', 'url_embed') . '/js/plugins/drupalentity/entity.png');
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAllowedDisplayPlugins() {
-    $allowed_display_plugins = array();
-    // Include only those plugin ids in result whose value is set.
-    foreach ($this->display_plugins as $key => $value) {
-      if ($value) {
-        $allowed_display_plugins[$key] = $value;
-      }
-    }
-    return $allowed_display_plugins;
   }
 
   /**

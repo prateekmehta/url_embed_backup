@@ -30,6 +30,15 @@ interface UrlButtonInterface{# extends ConfigEntityInterface {
    */
   public function getSourceLabel();
 
+
+  /**
+   * Returns the label of the sources of url for which this button is enabled.
+   *
+   * @return string
+   *   Human readable label of the source.
+   */
+  public function getoembedProvider();
+
   /**
    * Returns the label for the button to be shown in CKEditor toolbar.
    *
@@ -45,21 +54,5 @@ interface UrlButtonInterface{# extends ConfigEntityInterface {
    *   URL for the button'icon.
    */
   public function getButtonImage();
-
-  /**
-   * Returns the list of Ombed providers selected for the entity type.
-   *
-   * @return array
-   *   List of allowed bundles.
-   */
-  public function getSourceBundles();
-
-  /**
-   * Returns the list of display plugins allowed for the entity type.
-   *
-   * @return array
-   *   List of allowed display plugins.
-   */
-  public function getAllowedDisplayPlugins();
 
 }

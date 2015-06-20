@@ -25,13 +25,7 @@ url_embed.url_button.*:
     source:
       type: string
       label: 'Source of Url'
-    source_type_bundles:
-      type: sequence
-      label: 'Entity type bundles'
-      sequence:
-        type: string
-        label: 'Bundle'              
-    Oembed_type:
+    oembed_provider:
       type: string
       label: 'Oembed Provider'
     button_icon_uuid:
