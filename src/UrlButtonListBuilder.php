@@ -7,20 +7,20 @@
 
 namespace Drupal\url_embed;
 
-#use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
-#use Drupal\Core\Entity\UrlInterface;
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Provides a listing of UrlButton.
  */
-class UrlButtonListBuilder{# extends ConfigEntityListBuilder {
+class UrlButtonListBuilder extends ConfigEntityListBuilder {
 
   /**
    * {@inheritdoc}
    */
   public function buildHeader() {
     $header['label'] = $this->t('Url button');
-    $header['source'] = $this->t('Entity Type');
+    $header['entity_type'] = $this->t('Entity Type');
     $header['button_label'] = $this->t('Button Label');
     return $header + parent::buildHeader();
   }
@@ -30,7 +30,7 @@ class UrlButtonListBuilder{# extends ConfigEntityListBuilder {
    */
   public function buildRow(UrlInterface $url) {
     $row['label'] = $this->getLabel($url);
-    $row['source'] = $url->getEntityTypeLabel();
+    $row['entity_type'] = $url->getEntityTypeLabel();
     $row['button_label'] = $url->getButtonLabel();
     return $row + parent::buildRow($url);
   
