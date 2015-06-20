@@ -47,7 +47,6 @@ use Drupal\url_embed\EntityHelperTrait;
  * )
  */
 class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
-  use UrlHelperTrait;
 
   /**
    * The UrlButton ID.

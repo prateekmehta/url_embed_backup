@@ -20,7 +20,7 @@ interface UrlButtonInterface{# extends ConfigEntityInterface {
    * @return string
    *   Machine name of the sources .
    */
-  public function getSourceMachineName();
+  public function getSource();
 
   /**
    * Returns the label of the sources of url for which this button is enabled.
@@ -28,16 +28,7 @@ interface UrlButtonInterface{# extends ConfigEntityInterface {
    * @return string
    *   Human readable label of the source.
    */
-  public function getSourceLabel();
-
-
-  /**
-   * Returns the label of the sources of url for which this button is enabled.
-   *
-   * @return string
-   *   Human readable label of the source.
-   */
-  public function getoembedProvider();
+  public function getOembedProvider();
 
   /**
    * Returns the label for the button to be shown in CKEditor toolbar.
