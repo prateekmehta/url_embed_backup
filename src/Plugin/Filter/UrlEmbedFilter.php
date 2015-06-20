@@ -10,9 +10,9 @@ namespace Drupal\url_embed\Plugin\Filter;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Component\Utility\Html;
 use Drupal\filter\Annotation\Filter;
-#use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\filter\Plugin\FilterBase;
-#use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 include '../../Embed/src/autoloader.php';
 
@@ -26,7 +26,7 @@ include '../../Embed/src/autoloader.php';
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE
  * )
  */
-class UrlEmbedFilter extends FilterBase{# implements ContainerFactoryPluginInterface {
+class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
    * Replace the contents of a DOMNode.
