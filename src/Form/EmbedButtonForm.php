@@ -179,21 +179,6 @@ class UrlButtonForm extends EntityForm {
     $entity_type_id = $form_state->getValue('entity_type') ?: $url_button->entity_type;
     if ($entity_type_id) {
       $entity_type = $this->entityManager->getDefinition($entity_type_id);
-      // If the entity has bundles, allow option to restrict to bundle(s).
-      if ($entity_type->hasKey('bundle')) {
-        foreach ($this->entityManager->getBundleInfo($entity_type_id) as $bundle_id => $bundle_info) {
-          $bundle_options[$bundle_id] = $bundle_info['label'];
-        }
-
-        // Hide selection if there's just one option, since that's going to be
-        // allowed in either case.
-        if (count($bundle_options) > 1) {
-          $form['entity_type_bundles'] += array(
-            '#title' => $entity_type->getBundleLabel() ?: $this->t('Bundles'),
-            '#options' => $bundle_options,
-            '#description' => $this->t('If none are selected, all are allowed.'),
-          );
-        }
       }
 
       // Allow option to limit display plugins.
@@ -202,10 +187,6 @@ class UrlButtonForm extends EntityForm {
         '#options' => $this->displayPluginManager->getDefinitionOptionsForEntityType($entity_type_id),
         '#description' => $this->t('If none are selected, all are allowed. Note that these are the plugins which are allowed for this entity type, all of these might not be available for the selected entity.'),
       );
-    }
-    // Set options to an empty array if it hasn't been set so far.
-    if (!isset($form['entity_type_bundles']['#options'])) {
-      $form['entity_type_bundles']['#options'] = array();
     }
     if (!isset($form['display_plugins']['#options'])) {
       $form['display_plugins']['#options'] = array();
