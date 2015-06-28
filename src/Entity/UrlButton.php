@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\url_embed\URL\UrlButton.
+ * Contains \Drupal\url_embed\Entity\UrlButton.
  */
 
 namespace Drupal\url_embed\URL;
