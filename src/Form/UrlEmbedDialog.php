@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\entity_embed\Form\EntityEmbedDialog.
+ * Contains \Drupal\url_embed\Form\UrlEmbedDialog.
  */
 
-namespace Drupal\entity_embed\Form;
+namespace Drupal\url_embed\Form;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -16,19 +16,16 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\editor\Ajax\EditorDialogSave;
 use Drupal\editor\Entity\Editor;
-use Drupal\entity_embed\EntityEmbedDisplay\EntityEmbedDisplayManager;
-use Drupal\entity_embed\EntityHelperTrait;
-use Drupal\entity_embed\EmbedButtonInterface;
+use Drupal\url_embed\UrlButtonInterface;
 use Drupal\filter\FilterFormatInterface;
 use Drupal\Component\Serialization\Json;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form to embed entities by specifying data attributes.
+ * Provides a form to embed urls.
  */
-class EntityEmbedDialog extends FormBase {
-  use EntityHelperTrait;
+class UrlEmbedDialog extends FormBase {
 
   /**
    * The form builder.
@@ -45,17 +42,14 @@ class EntityEmbedDialog extends FormBase {
   protected $logger;
 
   /**
-   * Constructs a EntityEmbedDialog object.
+   * Constructs a UrlEmbedDialog object.
    *
-   * @param \Drupal\entity_embed\EntityEmbedDisplay\EntityEmbedDisplayManager $plugin_manager
-   *   The Module Handler.
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The Form Builder.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    */
-  public function __construct(EntityEmbedDisplayManager $plugin_manager, FormBuilderInterface $form_builder, LoggerInterface $logger) {
-    $this->setDisplayPluginManager($plugin_manager);
+  public function __construct(FormBuilderInterface $form_builder, LoggerInterface $logger) {
     $this->formBuilder = $form_builder;
     $this->logger = $logger;
   }
@@ -65,9 +59,8 @@ class EntityEmbedDialog extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('plugin.manager.entity_embed.display'),
       $container->get('form_builder'),
-      $container->get('logger.factory')->get('entity_embed')
+      $container->get('logger.factory')->get('url_embed')
     );
   }
 
@@ -75,7 +68,7 @@ class EntityEmbedDialog extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'entity_embed_dialog';
+    return 'url_embed_dialog';
   }
 
   /**
@@ -83,15 +76,15 @@ class EntityEmbedDialog extends FormBase {
    *
    * @param \Drupal\filter\Entity\FilterFormatInterface $filter_format
    *   The filter format to which this dialog corresponds.
-   * @param \Drupal\entity_embed\Entity\EmbedButtonInterface $embed_button
-   *   The embed button to which this dialog corresponds.
+   * @param \Drupal\url_embed\Entity\UrlButtonInterface $url_button
+   *   The url button to which this dialog corresponds.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, FilterFormatInterface $filter_format = NULL, EmbedButtonInterface $embed_button = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, FilterFormatInterface $filter_format = NULL, UrlButtonInterface $url_button = NULL) {
     $values = $form_state->getValues();
     $input = $form_state->getUserInput();
-    // Set embed button element in form state, so that it can be used later in
+    // Set url button element in form state, so that it can be used later in
     // validateForm() function.
-    $form_state->set('embed_button', $embed_button);
+    $form_state->set('url_button', $url_button);
     // Initialize entity element with form attributes, if present.
     $entity_element = empty($values['attributes']) ? array() : $values['attributes'];
     // The default values are set directly from \Drupal::request()->request,
@@ -101,7 +94,7 @@ class EntityEmbedDialog extends FormBase {
     }
     $entity_element += $form_state->get('entity_element');
     $entity_element += array(
-      'data-entity-type' => $embed_button->getEntityTypeMachineName(),
+      'data-entity-type' => $url_button->getEntityTypeMachineName(),
       'data-entity-uuid' => '',
       'data-entity-id' => '',
       'data-entity-embed-display' => 'default',
@@ -121,7 +114,7 @@ class EntityEmbedDialog extends FormBase {
 
     $form['#tree'] = TRUE;
     $form['#attached']['library'][] = 'editor/drupal.editor.dialog';
-    $form['#attached']['library'][] = 'entity_embed/drupal.entity_embed.dialog';
+    $form['#attached']['library'][] = 'url_embed/drupal.entity_embed.dialog';
     $form['#prefix'] = '<div id="entity-embed-dialog-form">';
     $form['#suffix'] = '</div>';
 
@@ -148,7 +141,7 @@ class EntityEmbedDialog extends FormBase {
           '#type' => 'entity_autocomplete',
           '#target_type' => $entity_element['data-entity-type'],
           '#selection_settings' => array(
-            'target_bundles' => $embed_button->getEntityTypeBundles(),
+            'target_bundles' => $url_button->getEntityTypeBundles(),
           ),
           '#title' => $label,
           '#default_value' => $entity,
@@ -205,7 +198,7 @@ class EntityEmbedDialog extends FormBase {
         );
 
         // Build the list of allowed display plugins.
-        $allowed_plugins = $embed_button->getAllowedDisplayPlugins();
+        $allowed_plugins = $url_button->getAllowedDisplayPlugins();
         $available_plugins = $this->displayPluginManager()->getDefinitionOptionsForEntity($entity);
         // If list of allowed options is empty, it means that all plugins are
         // allowed. Else, take the intresection of allowed and available
@@ -239,11 +232,11 @@ class EntityEmbedDialog extends FormBase {
         );
         $form['attributes']['data-embed-button'] = array(
           '#type' => 'value',
-          '#value' => $embed_button->id(),
+          '#value' => $url_button->id(),
         );
         $form['attributes']['data-entity-label'] = array(
           '#type' => 'value',
-          '#value' => $embed_button->getButtonLabel(),
+          '#value' => $url_button->getButtonLabel(),
         );
         $plugin_id = !empty($values['attributes']['data-entity-embed-display']) ? $values['attributes']['data-entity-embed-display'] : $entity_element['data-entity-embed-display'];
         if (!empty($plugin_id)) {
@@ -332,15 +325,15 @@ class EntityEmbedDialog extends FormBase {
 
               // Ensure that at least one display plugin is present before
               // proceeding to the next step. Rasie an error otherwise.
-              $embed_button = $form_state->get('embed_button');
-              $allowed_plugins = $embed_button->getAllowedDisplayPlugins();
+              $url_button = $form_state->get('url_button');
+              $allowed_plugins = $url_button->getAllowedDisplayPlugins();
               $available_plugins = $this->displayPluginManager()->getDefinitionOptionsForEntity($entity);
               $display_plugin_options = empty($allowed_plugins) ? $available_plugins : array_intersect_key($available_plugins, $allowed_plugins);
               // If no plugin is available after taking the intersection,
               // raise error. Also log an exception.
               if (empty($display_plugin_options)) {
                 $form_state->setError($form['attributes']['data-entity-id'], $this->t('No display options available for the selected entity. Please select another entity.'));
-                $this->logger->warning('No display options available for "@type:" entity "@id" while embedding using button "@button". Please ensure that at least one display plugin is allowed for this embed button which is available for this entity.', array('@type' => $entity_type, '@id' => $entity->id(), '@button' => $embed_button->id()));
+                $this->logger->warning('No display options available for "@type:" entity "@id" while embedding using button "@button". Please ensure that at least one display plugin is allowed for this url button which is available for this entity.', array('@type' => $entity_type, '@id' => $entity->id(), '@button' => $url_button->id()));
               }
             }
           }
@@ -394,7 +387,7 @@ class EntityEmbedDialog extends FormBase {
 
     $form_state->setStorage(array('step' => 'select'));
     $form_state->setRebuild(TRUE);
-    $rebuild_form = $this->formBuilder->rebuildForm('entity_embed_dialog', $form_state, $form);
+    $rebuild_form = $this->formBuilder->rebuildForm('url_embed_dialog', $form_state, $form);
     unset($rebuild_form['#prefix'], $rebuild_form['#suffix']);
     $response->addCommand(new HtmlCommand('#entity-embed-dialog-form', $rebuild_form));
 
@@ -424,7 +417,7 @@ class EntityEmbedDialog extends FormBase {
     else {
       $form_state->setStorage(array('step' => 'embed'));
       $form_state->setRebuild(TRUE);
-      $rebuild_form = $this->formBuilder->rebuildForm('entity_embed_dialog', $form_state, $form);
+      $rebuild_form = $this->formBuilder->rebuildForm('url_embed_dialog', $form_state, $form);
       unset($rebuild_form['#prefix'], $rebuild_form['#suffix']);
       $response->addCommand(new HtmlCommand('#entity-embed-dialog-form', $rebuild_form));
     }
@@ -477,21 +470,21 @@ class EntityEmbedDialog extends FormBase {
   }
 
   /**
-   * Checks whether or not the embed button is enabled for given text format.
+   * Checks whether or not the url button is enabled for given text format.
    *
-   * Returns allowed if the editor toolbar contains the embed button and neutral
+   * Returns allowed if the editor toolbar contains the url button and neutral
    * otherwise.
    *
    * @param \Drupal\filter\Entity\FilterFormatInterface $filter_format
    *   The filter format to which this dialog corresponds.
-   * @param \Drupal\entity_embed\Entity\EmbedButtonInterface $embed_button
-   *   The embed button to which this dialog corresponds.
+   * @param \Drupal\url_embed\Entity\UrlButtonInterface $url_button
+   *   The url button to which this dialog corresponds.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function buttonIsEnabled(FilterFormatInterface $filter_format, EmbedButtonInterface $embed_button) {
-    $button_id = $embed_button->id();
+  public function buttonIsEnabled(FilterFormatInterface $filter_format, UrlButtonInterface $url_button) {
+    $button_id = $url_button->id();
     $editor = Editor::load($filter_format->id());
     $settings = $editor->getSettings();
     foreach ($settings['toolbar']['rows'] as $row_number => $row) {
