@@ -23,7 +23,7 @@ interface UrlButtonInterface{# extends ConfigEntityInterface {
   public function getSource();
 
   /**
-   * Returns the label of the sources of url for which this button is enabled.
+   * Returns the label of the provider of url for which this button is enabled.
    *
    * @return string
    *   Human readable label of the source.

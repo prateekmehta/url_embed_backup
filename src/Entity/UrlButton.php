@@ -5,11 +5,10 @@
  * Contains \Drupal\url_embed\Entity\UrlButton.
  */
 
-namespace Drupal\url_embed\URL;
+namespace Drupal\url_embed\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\url_embed\UrlButtonInterface;
-use Drupal\url_embed\EntityHelperTrait;
 
 /**
  * Defines the UrlButton entity.
@@ -70,7 +69,7 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
   public $button_label;
   
   /**
-   * Array of Ombed providers allowed for the entity type.
+   * Array of Ombed providers allowed for the URL.
    *
    * An empty array signifies that all are allowed.
    *
@@ -78,8 +77,22 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    */
   public $oembed_provider;
 
+  /** 
+   * {@inheritdoc}
+   */
+  public function getEntityTypeMachineName() {
+    return $this->entity_type;
+  }
+
+  /** 
+   * {@inheritdoc}
+   */
+  public function getEntityTypeLabel() {
+    return $this->entityManager()->getDefinition($this->entity_type)->getLabel();
+  }
+
   /**
-   * UUID of the button's icon file.
+   * UUID of the button's icon fili.
    *
    * @var string
    */
@@ -93,6 +106,18 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    * @var array
    */
   public $display_plugins;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSource(){
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOembedProvider(){
+  }
 
   /**
    * {@inheritdoc}

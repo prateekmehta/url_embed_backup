@@ -16,7 +16,6 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\ckeditor\CKEditorPluginManager;
-use Drupal\entity_embed\EntityEmbedDisplay\EntityEmbedDisplayManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UrlButtonForm extends EntityForm {
@@ -35,12 +34,6 @@ class UrlButtonForm extends EntityForm {
    */
   protected $entityQuery;
 
-  /**
-   * The display plugin manager.
-   *
-   * @var \Drupal\entity_embed\EntityEmbedDisplay\EntityEmbedDisplayManager
-   */
-  protected $displayPluginManager;
 
   /**
    * The CKEditor plugin manager.
@@ -50,7 +43,7 @@ class UrlButtonForm extends EntityForm {
   protected $ckeditorPluginManager;
 
   /**
-   * The entity_embed settings config object.
+   * The url_embed settings config object.
    *
    * @var \Drupal\Core\Config\Config
    */
@@ -63,19 +56,19 @@ class UrlButtonForm extends EntityForm {
    *   The entity query.
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager service.
-   * @param \Drupal\entity_embed\EntityEmbedDisplay\EntityEmbedDisplayManager $plugin_manager
+   * @param \Drupal\url_embed\EntityEmbedDisplay\EntityEmbedDisplayManager $plugin_manager
    *   The plugin manager.
    * @param \Drupal\ckeditor\CKEditorPluginManager $ckeditor_plugin_manager
    *   The CKEditor plugin manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
-  public function __construct(QueryFactory $entity_query, EntityManagerInterface $entity_manager, EntityEmbedDisplayManager $plugin_manager, CKEditorPluginManager $ckeditor_plugin_manager, ConfigFactoryInterface $config_factory) {
+  public function __construct(QueryFactory $entity_query, EntityManagerInterface $entity_manager, CKEditorPluginManager $ckeditor_plugin_manager, ConfigFactoryInterface $config_factory) {
     $this->entityQuery = $entity_query;
     $this->entityManager = $entity_manager;
-    $this->displayPluginManager = $plugin_manager;
+#    $this->displayPluginManager = $plugin_manager;
     $this->ckeditorPluginManager = $ckeditor_plugin_manager;
-    $this->entityEmbedConfig = $config_factory->get('entity_embed.settings');
+    $this->entityEmbedConfig = $config_factory->get('url_embed.settings');
   }
 
   /**
@@ -85,7 +78,7 @@ class UrlButtonForm extends EntityForm {
     return new static(
       $container->get('entity.query'),
       $container->get('entity.manager'),
-      $container->get('plugin.manager.entity_embed.display'),
+ #     $container->get('plugin.manager.url_embed.display'),
       $container->get('plugin.manager.ckeditor.plugin'),
       $container->get('config.factory')
     );
@@ -169,29 +162,31 @@ class UrlButtonForm extends EntityForm {
         'file_validate_image_resolution' => array('16x16'),
       ),
     );
+    /*
     $form['display_plugins'] = array(
       '#type' => 'checkboxes',
       '#default_value' => $url_button->display_plugins ?: array(),
       '#prefix' => '<div id="display-plugins-wrapper">',
       '#suffix' => '</div>',
     );
-
+    */
     $entity_type_id = $form_state->getValue('entity_type') ?: $url_button->entity_type;
     if ($entity_type_id) {
       $entity_type = $this->entityManager->getDefinition($entity_type_id);
       }
 
-      // Allow option to limit display plugins.
+    // Allow option to limit display plugins.
+    /*
       $form['display_plugins'] += array(
         '#title' => $this->t('Allowed display plugins'),
         '#options' => $this->displayPluginManager->getDefinitionOptionsForEntityType($entity_type_id),
         '#description' => $this->t('If none are selected, all are allowed. Note that these are the plugins which are allowed for this entity type, all of these might not be available for the selected entity.'),
       );
-    }
+    
     if (!isset($form['display_plugins']['#options'])) {
       $form['display_plugins']['#options'] = array();
     }
-
+    */
     return $form;
   }
 
