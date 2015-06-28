@@ -20,7 +20,7 @@ class UrlButtonListBuilder extends ConfigEntityListBuilder {
    */
   public function buildHeader() {
     $header['label'] = $this->t('Url button');
-    $header['entity_type'] = $this->t('Entity Type');
+    #$header['entity_type'] = $this->t('Entity Type');
     $header['button_label'] = $this->t('Button Label');
     return $header + parent::buildHeader();
   }
@@ -30,7 +30,7 @@ class UrlButtonListBuilder extends ConfigEntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $row['label'] = $this->getLabel($entity);
-    $row['entity_type'] = $entity->getEntityTypeLabel();
+    #$row['entity_type'] = $entity->getEntityTypeLabel();
     $row['button_label'] = $entity->getButtonLabel();
     return $row + parent::buildRow($entity);
   }
