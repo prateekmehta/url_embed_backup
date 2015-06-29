@@ -122,7 +122,7 @@ class UrlButtonCrudTest extends KernelTestBase {
     $entity->delete();
 
     // Ensure that the storage is now empty.
-   config = $config_storage->listAll('url_embed.url_button.');
+    $config = $config_storage->listAll('url_embed.url_button.');
     $this->assertTrue(empty($config), 'There are no url buttons in config storage.');
   }
 
