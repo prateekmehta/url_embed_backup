@@ -34,14 +34,14 @@ use Drupal\url_embed\UrlButtonInterface;
  *     "label",
  *     "id",
  *     "button_label",
- *     "entity_type",
- *     "Oembed_type",
+ *     "source",
+ *     "Oembed_provider",
  *     "button_icon_uuid",
  *     "display_plugins",
  *   },
  *   links = {
- *     "edit-form" = "/admin/config/content/embed-button/{url_button}",
- *     "delete-form" = "/admin/config/content/embed-button/{url_button}/delete"
+ *     "edit-form" = "/admin/config/content/url-button/{url_button}",
+ *     "delete-form" = "/admin/config/content/url-button/{url_button}/delete"
  *   }
  * )
  */
@@ -77,20 +77,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    */
   public $oembed_provider;
 
-  /** 
-   * {@inheritdoc}
-   */
-  public function getEntityTypeMachineName() {
-    return $this->entity_type;
-  }
-
-  /** 
-   * {@inheritdoc}
-   */
-  public function getEntityTypeLabel() {
-    return $this->entityManager()->getDefinition($this->entity_type)->getLabel();
-  }
-
   /**
    * UUID of the button's icon fili.
    *
@@ -117,20 +103,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    * {@inheritdoc}
    */
   public function getOembedProvider(){
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSourceMachineName() {
-    return $this->source;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSourceLabel() {
-    return $this->entityManager()->getDefinition($this->entity_type)->getLabel();
   }
 
   /**
